@@ -28,20 +28,20 @@ public class DAHotel {
         this.password = password;
     }   
     
-    public Hotel getHotel() {
+    public Hotel getHotel(String id) {
         Hotel hotel = null;
 
         try (
                 Connection connection = DriverManager.getConnection(url, login, password);
                 Statement statement = connection.createStatement();
-                ResultSet resultset = statement.executeQuery("Select * from Hotel where id = 1");) {
+                ResultSet resultset = statement.executeQuery("Select * from Hotel where id = " + id);) {
 
             if (resultset.next()){
                 hotel = new Hotel();
                 hotel.setId(resultset.getInt("id"));
                 hotel.setHotelnaam(resultset.getString("hotelnaam"));
                 hotel.setAantalSterren(resultset.getDouble("aantalsterren"));
-                hotel.setAccomodatie(resultset.getString("accomodatie"));
+                hotel.setAccomodatie(resultset.getString("accommodatie"));
                 hotel.setFoto(resultset.getString("foto"));
                 hotel.setKamers(resultset.getString("kamers"));
                 hotel.setLigging(resultset.getString("ligging"));
