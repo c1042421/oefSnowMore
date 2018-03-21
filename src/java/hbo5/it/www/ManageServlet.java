@@ -12,6 +12,7 @@ import hbo5.it.www.dataacces.DAHotel;
 import hbo5.it.www.dataacces.DASkigebied;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
@@ -52,6 +53,7 @@ public class ManageServlet extends HttpServlet {
         
         boolean laadPaginaVoorHotel = request.getParameter("hotel") != null;
         boolean laadPaginaVoorSkiGebied = request.getParameter("skigebied") != null;
+        boolean laadPaginaAlleHotels = request.getParameter("allHotels") != null;
         String teZoekenGebied = request.getParameter("zoekSkigebied");
 
         try {
@@ -63,12 +65,21 @@ public class ManageServlet extends HttpServlet {
                 session.setAttribute("skigebied", skigebied);
                 
                 request.getRequestDispatcher("skigebied.jsp").forward(request, response);
-            }else {
+                
+            }else if(laadPaginaVoorHotel) {
                 DAHotel daHotel = new DAHotel(url, login, password, driver);
                 Hotel hotel = daHotel.getHotel();
                 
                 session.setAttribute("hotel", hotel);
                 request.getRequestDispatcher("hotel.jsp").forward(request, response);
+                
+            } else if(laadPaginaAlleHotels) {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                ArrayList<Hotel> hotels = daHotel.getAllHotelsSorted();
+                
+                session.setAttribute("hotels", hotels);
+                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+               
             }
 
         } catch (Exception e) {

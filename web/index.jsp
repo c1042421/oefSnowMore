@@ -19,6 +19,7 @@
             <input type="submit" name="skigebied" value="Toon specifiek skigebied"/>
             <input type="text" name="zoekSkigebied" placeholder="Geef de naam"/>
             <input type="submit" name="hotel" value="Toon specifiek hotel"/>
+            <input type="submit" name="allHotels" value="Toon hotels"/>
         </form>
     </body>
 </html>
