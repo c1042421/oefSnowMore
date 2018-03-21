@@ -49,15 +49,16 @@ public class ManageServlet extends HttpServlet {
         String login = getInitParameter("login");
         String password = getInitParameter("password");
         String driver = getInitParameter("driver");
-
+        
         boolean laadPaginaVoorHotel = request.getParameter("hotel") != null;
         boolean laadPaginaVoorSkiGebied = request.getParameter("skigebied") != null;
+        String teZoekenGebied = request.getParameter("zoekSkigebied");
 
         try {
 
             if (laadPaginaVoorSkiGebied) {
                 DASkigebied daSkigebied = new DASkigebied(url, login, password, driver);
-                Skigebied skigebied = daSkigebied.getSkigebied();
+                Skigebied skigebied = daSkigebied.zoekSkigebiedOpNaam(teZoekenGebied);
                 
                 session.setAttribute("skigebied", skigebied);
                 
@@ -73,7 +74,6 @@ public class ManageServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

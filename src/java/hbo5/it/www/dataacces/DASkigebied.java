@@ -45,4 +45,29 @@ public class DASkigebied {
         
         return skigebied;
     }
+    
+    public Skigebied zoekSkigebiedOpNaam(String naam){
+        
+         try (
+                Connection connection = DriverManager.getConnection(url, login, password);
+                Statement statement = connection.createStatement();
+                ResultSet resultset = statement.executeQuery("Select * from Skigebied");) {
+
+            while (resultset.next()){
+                
+                String skigebiedNaam = resultset.getString("skigebied").toLowerCase();
+                
+                if (skigebiedNaam.contains(naam.toLowerCase())){
+                    Skigebied skigebied = new Skigebied();
+                    skigebied.setId(resultset.getInt("id"));
+                    skigebied.setSkigebied(resultset.getString("skigebied"));
+                    
+                    return skigebied;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+         return null;  
+    }
 }

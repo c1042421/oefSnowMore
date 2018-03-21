@@ -17,6 +17,7 @@
         
         <form action="ManageServlet">
             <input type="submit" name="skigebied" value="Toon specifiek skigebied"/>
+            <input type="text" name="zoekSkigebied" placeholder="Geef de naam"/>
             <input type="submit" name="hotel" value="Toon specifiek hotel"/>
         </form>
     </body>
