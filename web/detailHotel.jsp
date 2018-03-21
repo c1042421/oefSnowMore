@@ -22,9 +22,7 @@
         <p><%= hotel.getKamers()%></p>
         <p><%= hotel.getMaaltijden()%></p>
         <p><%= hotel.getPistes()%></p>
-        <p><%= hotel.getFoto() %></p>
-        
-        <img src=<%= hotel.getFoto()%> 
+        <img src="images/<%= hotel.getFoto()%>" alt="No foto found" /> 
         
     </body>
 </html>
