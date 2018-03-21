@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package hbo5.it.www;
 
 import hbo5.it.www.beans.Hotel;
-import hbo5.it.www.beans.Skigebied;
 import hbo5.it.www.dataacces.DAHotel;
-import hbo5.it.www.dataacces.DASkigebied;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,13 +21,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author c1042421
  */
-@WebServlet(urlPatterns = {"/ManageServlet"}, initParams = {
+ @WebServlet(name = "DetailServlet", urlPatterns = {"/DetailServlet"}, initParams = {
     @WebInitParam(name = "url", value = "jdbc:oracle:thin:@itf-oracledb01.thomasmore.be:1521:XE")
     , @WebInitParam(name = "driver", value = "oracle.jdbc.driver.OracleDriver")
     , @WebInitParam(name = "login", value = "c1042421")
     , @WebInitParam(name = "password", value = "1234")})
 
-public class ManageServlet extends HttpServlet {
+public class DetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +38,9 @@ public class ManageServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+   
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -51,39 +50,18 @@ public class ManageServlet extends HttpServlet {
         String password = getInitParameter("password");
         String driver = getInitParameter("driver");
         
-        boolean laadPaginaVoorHotel = request.getParameter("hotel") != null;
-        boolean laadPaginaVoorSkiGebied = request.getParameter("skigebied") != null;
-        boolean laadPaginaAlleHotels = request.getParameter("allHotels") != null;
-        String teZoekenGebied = request.getParameter("zoekSkigebied");
-
+       String id = request.getParameter("id");
+       Hotel hotel = null;
         try {
-
-            if (laadPaginaVoorSkiGebied) {
-                DASkigebied daSkigebied = new DASkigebied(url, login, password, driver);
-                Skigebied skigebied = daSkigebied.zoekSkigebiedOpNaam(teZoekenGebied);
-                
-                session.setAttribute("skigebied", skigebied);
-                request.getRequestDispatcher("skigebied.jsp").forward(request, response);
-                
-            }else if(laadPaginaVoorHotel) {
-                DAHotel daHotel = new DAHotel(url, login, password, driver);
-                Hotel hotel = daHotel.getHotel("1");
-                
-                session.setAttribute("hotel", hotel);
-                request.getRequestDispatcher("hotel.jsp").forward(request, response);
-                
-            } else if(laadPaginaAlleHotels) {
-                DAHotel daHotel = new DAHotel(url, login, password, driver);
-                ArrayList<Hotel> hotels = daHotel.getAllHotelsSorted();
-                
-                session.setAttribute("hotels", hotels);
-                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
-               
-            }
-
-        } catch (Exception e) {
+            DAHotel daHotel = new DAHotel(url, login, password, driver);
+            hotel = daHotel.getHotel(id);
+        }catch (Exception e) {
             e.printStackTrace();
         }
+        
+        session.setAttribute("detailHotel", hotel);
+        
+        request.getRequestDispatcher("detailHotel.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

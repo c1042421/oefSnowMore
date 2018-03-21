@@ -19,7 +19,7 @@
         <h1>Lijst van hotels:</h1>
         
         <% for (Hotel hotel : hotels) { %>
-            <p><%= hotel.getHotelnaam() %>  <%= hotel.getAantalSterren() %></p>
+        <p><a href="DetailServlet?id=<%= hotel.getId() %>"><%= hotel.getHotelnaam() %>  <%= hotel.getAantalSterren() %></a></p>
         <% } %>
     </body>
 </html>
