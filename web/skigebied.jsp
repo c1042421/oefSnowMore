@@ -14,6 +14,10 @@
     </head>
     <body>
         <% Skigebied skigebied = (Skigebied) session.getAttribute("skigebied"); %>
+        <% if (skigebied != null) { %>
         <h1>Skigebied: <%= skigebied.getSkigebied() %></h1>
+        <%} else { %>
+        <h1>Er is geen gebied gevonden..</h1>
+        <%}%>
     </body>
 </html>
