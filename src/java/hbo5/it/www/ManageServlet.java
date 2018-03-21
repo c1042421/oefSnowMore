@@ -6,7 +6,9 @@
 
 package hbo5.it.www;
 
+import hbo5.it.www.beans.Hotel;
 import hbo5.it.www.beans.Skigebied;
+import hbo5.it.www.dataacces.DAHotel;
 import hbo5.it.www.dataacces.DASkigebied;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,6 +62,12 @@ public class ManageServlet extends HttpServlet {
                 session.setAttribute("skigebied", skigebied);
                 
                 request.getRequestDispatcher("skigebied.jsp").forward(request, response);
+            }else {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                Hotel hotel = daHotel.getHotel();
+                
+                session.setAttribute("hotel", hotel);
+                request.getRequestDispatcher("hotel.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

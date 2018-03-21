@@ -21,8 +21,7 @@ public class Hotel {
     private String pistes;
     private String foto;
 
-    public Hotel(int id) {
-        this.id = id;
+    public Hotel() {
     }
 
     public int getId() {
