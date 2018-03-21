@@ -20,6 +20,7 @@ public class Hotel {
     private String maaltijden;
     private String pistes;
     private String foto;
+    private Skigebied skigebied;
 
     public Hotel() {
     }
@@ -95,5 +96,12 @@ public class Hotel {
     public void setFoto(String foto) {
         this.foto = foto;
     }
+    
+     public Skigebied getSkigebied() {
+        return skigebied;
+    }
 
+    public void setSkigebied(Skigebied skigebied) {
+        this.skigebied = skigebied;
+    }
 }

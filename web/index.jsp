@@ -16,10 +16,11 @@
         <h2>Door: Jelmar Van Aert</h2>
         
         <form action="ManageServlet">
-            <input type="submit" name="skigebied" value="Toon specifiek skigebied"/>
-            <input type="text" name="zoekSkigebied" placeholder="Geef de naam"/>
-            <input type="submit" name="hotel" value="Toon specifiek hotel"/>
-            <input type="submit" name="allHotels" value="Toon hotels"/>
+            <p><input type="submit" name="skigebied" value="Toon specifiek skigebied"/>
+                <input type="text" name="zoekSkigebied" placeholder="Geef de naam"/></p>
+            <p><input type="submit" name="hotel" value="Toon specifiek hotel"/></p>
+            <p><input type="submit" name="allHotels" value="Toon hotels"/></p>
+            <p><input type="submit" name="aanbod" value="Toon Aanbod"/></p>
         </form>
     </body>
 </html>

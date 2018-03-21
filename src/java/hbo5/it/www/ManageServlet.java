@@ -6,8 +6,10 @@
 
 package hbo5.it.www;
 
+import hbo5.it.www.beans.Aanbod;
 import hbo5.it.www.beans.Hotel;
 import hbo5.it.www.beans.Skigebied;
+import hbo5.it.www.dataacces.DAAanbod;
 import hbo5.it.www.dataacces.DAHotel;
 import hbo5.it.www.dataacces.DASkigebied;
 import java.io.IOException;
@@ -54,6 +56,7 @@ public class ManageServlet extends HttpServlet {
         boolean laadPaginaVoorHotel = request.getParameter("hotel") != null;
         boolean laadPaginaVoorSkiGebied = request.getParameter("skigebied") != null;
         boolean laadPaginaAlleHotels = request.getParameter("allHotels") != null;
+        boolean laadPaginaVoorAanbod = request.getParameter("aanbod") != null;
         String teZoekenGebied = request.getParameter("zoekSkigebied");
 
         try {
@@ -79,6 +82,13 @@ public class ManageServlet extends HttpServlet {
                 session.setAttribute("hotels", hotels);
                 request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
                
+            }else if (laadPaginaVoorAanbod) {
+                 DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
+                ArrayList<Aanbod> hotels = daAanbod.getAllAanbodSortedByPeriodAndName();
+                
+                session.setAttribute("hotels", hotels);
+                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+                
             }
 
         } catch (Exception e) {
