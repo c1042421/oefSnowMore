@@ -21,6 +21,7 @@
             <p><input type="submit" name="hotel" value="Toon specifiek hotel"/></p>
             <p><input type="submit" name="allHotels" value="Toon hotels"/></p>
             <p><input type="submit" name="aanbod" value="Toon Aanbod"/></p>
+            <p><input type="submit" name="zoeken" value="Uitgebreid zoeken"/></p>
         </form>
     </body>
 </html>
