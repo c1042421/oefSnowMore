@@ -16,6 +16,7 @@
         <% Hotel hotel = (Hotel) session.getAttribute("detailHotel"); %>
         
         <h1><%= hotel.getHotelnaam() %> </h1> <h3><%= hotel.getAantalSterren() %></h3>
+        <h5><%= hotel.getSkigebied().getSkigebied() %></h5>
         
         <p><%= hotel.getLigging() %></p>
         <p><%= hotel.getAccomodatie()%></p>
