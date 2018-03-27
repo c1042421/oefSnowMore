@@ -65,7 +65,7 @@ public class DAHotel {
     public ArrayList<Hotel> getHotelsForStars(int sterren) {
         return getHotelForSQLStatement("Select * from Hotel "
                 + "inner join skigebied on hotel.skigebiedid = skigebied.id "
-                + "where aantalsterren = " + sterren);
+                + "where aantalsterren <= " + sterren);
     }
 
     private ArrayList<Hotel> getHotelForSQLStatement(String stringStatement) {
