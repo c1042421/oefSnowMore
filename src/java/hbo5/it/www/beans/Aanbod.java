@@ -12,6 +12,24 @@ package hbo5.it.www.beans;
 public class Aanbod {
     private int id;
     private double prijs;
+    private Hotel hotel;
+    private Periode periode;
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public Periode getPeriode() {
+        return periode;
+    }
+
+    public void setPeriode(Periode periode) {
+        this.periode = periode;
+    }
 
     public int getId() {
         return id;
@@ -28,6 +46,4 @@ public class Aanbod {
     public void setPrijs(double prijs) {
         this.prijs = prijs;
     }
-    
-    
 }

@@ -83,12 +83,11 @@ public class ManageServlet extends HttpServlet {
                 request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
                
             }else if (laadPaginaVoorAanbod) {
-                 DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
-                ArrayList<Aanbod> hotels = daAanbod.getAllAanbodSortedByPeriodAndName();
+                DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
+                ArrayList<Aanbod> aanbiedingen = daAanbod.getAllAanbodSortedByPeriodAndName();
                 
-                session.setAttribute("hotels", hotels);
-                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
-                
+                session.setAttribute("aanbiedingen", aanbiedingen);
+                request.getRequestDispatcher("overzichtAanbiedingen.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

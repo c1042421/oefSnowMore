@@ -55,7 +55,7 @@ public class DAHotel {
                 ResultSet resultset = statement.executeQuery("Select * from Hotel inner join skigebied on hotel.skigebiedid = skigebied.id");) {
 
             while (resultset.next()){
-                Hotel hotel = maakHotelVanResultSet(resultset);
+                Hotel hotel = ResultSetParser.parseHotel(resultset);
                 hotels.add(hotel);
             }
         } catch (Exception e) {
