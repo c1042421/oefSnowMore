@@ -31,44 +31,24 @@ public class DAHotel {
     }
 
     public Hotel getHotel(String id) {
-        Hotel hotel = null;
-
-        try (
-                Connection connection = DriverManager.getConnection(url, login, password);
-                Statement statement = connection.createStatement();
-                ResultSet resultset = statement.executeQuery("Select * from Hotel inner join skigebied on hotel.skigebiedid = skigebied.id where hotel.id = " + id)) {
-
-            if (resultset.next()) {
-                hotel = ResultSetParser.maakHotel(resultset);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return hotel;
+        return getHotelsForSQLStatement("Select * from Hotel "
+                + "inner join skigebied on hotel.skigebiedid = skigebied.id "
+                + "where hotel.id = " + id).get(0);
     }
 
     public ArrayList<Hotel> getAllHotelsSorted() {
-        ArrayList<Hotel> hotels = getHotelForSQLStatement("Select * from Hotel "
-                + "inner join skigebied on hotel.skigebiedid = skigebied.id");
-
-        hotels.sort(new Comparator<Hotel>() {
-            @Override
-            public int compare(Hotel o1, Hotel o2) {
-                return o1.getHotelnaam().compareTo(o2.getHotelnaam());
-            }
-        });
-
-        return hotels;
+       return getHotelsForSQLStatement("Select * from Hotel "
+                + "inner join skigebied on hotel.skigebiedid = skigebied.id "
+                + "order by hotelnaam");
     }
 
     public ArrayList<Hotel> getHotelsForStars(int sterren) {
-        return getHotelForSQLStatement("Select * from Hotel "
+        return getHotelsForSQLStatement("Select * from Hotel "
                 + "inner join skigebied on hotel.skigebiedid = skigebied.id "
                 + "where aantalsterren <= " + sterren);
     }
 
-    private ArrayList<Hotel> getHotelForSQLStatement(String stringStatement) {
+    private ArrayList<Hotel> getHotelsForSQLStatement(String stringStatement) {
         ArrayList<Hotel> hotels = new ArrayList<>();
 
         try (

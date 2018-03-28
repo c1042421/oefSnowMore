@@ -29,28 +29,19 @@ public class DAAanbod {
     }
 
     public ArrayList<Aanbod> getAllAanbodSortedByPeriodAndName() {
-        ArrayList<Aanbod> aanbiedingen = getAanbodForSQLStatement("select * from aanbod "
+       return getAanbodForSQLStatement("select * from aanbod "
                 + "inner join periode on periodeid = periode.id "
                 + "inner join hotel on hotelid = hotel.id "
-                + "inner join skigebied on skigebiedid = skigebied.id");
-
-        aanbiedingen.sort(new Comparator<Aanbod>() {
-            @Override
-            public int compare(Aanbod o1, Aanbod o2) {
-                return o1.getPeriode().getPeriode().compareTo(o2.getPeriode().getPeriode());
-            }
-        });
-
-        return aanbiedingen;
+                + "inner join skigebied on skigebiedid = skigebied.id "
+                + "order by periode");
     }
 
     public ArrayList<Aanbod> getAanbodForPeriode(int id) {
-        ArrayList<Aanbod> aanbiedingen = getAanbodForSQLStatement("select * from aanbod "
+        return getAanbodForSQLStatement("select * from aanbod "
                 + "inner join periode on periodeid = periode.id "
                 + "inner join hotel on hotelid = hotel.id "
                 + "inner join skigebied on skigebiedid = skigebied.id "
                 + "where periodeid = " + id);
-        return aanbiedingen;
     }
 
     private ArrayList<Aanbod> getAanbodForSQLStatement(String stringStatement) {
