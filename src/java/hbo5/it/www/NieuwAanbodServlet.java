@@ -5,8 +5,11 @@
  */
 package hbo5.it.www;
 
+import hbo5.it.www.beans.Aanbod;
 import hbo5.it.www.beans.Hotel;
-import hbo5.it.www.dataacces.DAHotel;
+import hbo5.it.www.beans.Periode;
+import hbo5.it.www.dataacces.DAAanbod;
+import hbo5.it.www.dataacces.DAPeriode;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -21,13 +24,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author c1042421
  */
- @WebServlet(name = "DetailServlet", urlPatterns = {"/DetailServlet"}, initParams = {
+@WebServlet(urlPatterns = {"/NieuwAanbodServlet"}, initParams = {
     @WebInitParam(name = "url", value = "jdbc:oracle:thin:@itf-oracledb01.thomasmore.be:1521:XE")
     , @WebInitParam(name = "driver", value = "oracle.jdbc.driver.OracleDriver")
     , @WebInitParam(name = "login", value = "c1042421")
     , @WebInitParam(name = "password", value = "1234")})
 
-public class DetailServlet extends HttpServlet {
+public class NieuwAanbodServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,30 +41,44 @@ public class DetailServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-   
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String url = getInitParameter("url");
         String login = getInitParameter("login");
         String password = getInitParameter("password");
         String driver = getInitParameter("driver");
-        
-       String id = request.getParameter("id");
-       Hotel hotel = null;
-        try {
-            DAHotel daHotel = new DAHotel(url, login, password, driver);
-            hotel = daHotel.getHotel(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        session.setAttribute("detailHotel", hotel);
-        
-        request.getRequestDispatcher("nieuweReis.jsp").forward(request, response);
+        boolean annuleer = request.getParameter("annuleer") != null;
+        boolean opslaan = request.getParameter("opslaan") != null;
+
+        if (annuleer) {
+            request.getRequestDispatcher("admin.jsp").forward(request, response);
+            
+        } else if (opslaan) {
+            double prijs = Double.parseDouble(request.getParameter("prijs"));
+            int periodeID = Integer.parseInt(request.getParameter("periode"));
+
+            try {
+                DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
+                DAPeriode daPeriode = new DAPeriode(url, login, password, driver);
+
+                Aanbod aanbod = new Aanbod();
+                Hotel hotel = (Hotel) session.getAttribute("adminHotel");
+                Periode periode = daPeriode.getPeriodeForID(periodeID);
+
+                aanbod.setHotel(hotel);
+                aanbod.setPeriode(periode);
+                aanbod.setPrijs(prijs);
+                
+                daAanbod.makeNewAanbod(aanbod);
+
+                request.getRequestDispatcher("admin.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

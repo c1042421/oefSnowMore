@@ -59,7 +59,8 @@ public class ManageServlet extends HttpServlet {
         boolean laadPaginaAlleHotels = request.getParameter("allHotels") != null;
         boolean laadPaginaVoorAanbod = request.getParameter("aanbod") != null;
         boolean laadPaginaVoorZoeken = request.getParameter("zoeken") != null;
-
+        boolean laadPaginaVoorAdmin = request.getParameter("admin") != null;
+        
         String teZoekenGebied = request.getParameter("zoekSkigebied");
 
         try {
@@ -94,6 +95,13 @@ public class ManageServlet extends HttpServlet {
 
             } else if (laadPaginaVoorZoeken) {
                 request.getRequestDispatcher("zoek.jsp").forward(request, response);
+                        
+            } else if (laadPaginaVoorAdmin) {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                ArrayList<Hotel> hotels = daHotel.getAllHotelsSorted();
+
+                session.setAttribute("hotels", hotels);                
+                request.getRequestDispatcher("admin.jsp").forward(request, response);
             }
 
             DAPeriode daperiode = new DAPeriode(url, login, password, driver);

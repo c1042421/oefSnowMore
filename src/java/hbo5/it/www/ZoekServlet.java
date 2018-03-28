@@ -80,9 +80,7 @@ public class ZoekServlet extends HttpServlet {
                 session.setAttribute("aanbiedingen", aanbiedingen);
                 request.getRequestDispatcher("overzichtAanbiedingen.jsp").forward(request, response);
             }
-
             
-
         } catch (Exception e) {
             e.printStackTrace();
         }

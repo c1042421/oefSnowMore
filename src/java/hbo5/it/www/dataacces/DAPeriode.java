@@ -45,4 +45,19 @@ public class DAPeriode {
 
         return periodes;
     }
+    
+    public Periode getPeriodeForID(int id) {
+         try (
+                Connection connection = DriverManager.getConnection(url, login, password);
+                Statement statement = connection.createStatement();
+                ResultSet resultset = statement.executeQuery("select * from periode where id = " + String.valueOf(id));) {
+
+            if (resultset.next()) {
+                return ResultSetParser.maakPeriode(resultset);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

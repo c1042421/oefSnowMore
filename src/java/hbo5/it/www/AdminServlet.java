@@ -6,9 +6,12 @@
 package hbo5.it.www;
 
 import hbo5.it.www.beans.Hotel;
+import hbo5.it.www.beans.Periode;
 import hbo5.it.www.dataacces.DAHotel;
+import hbo5.it.www.dataacces.DAPeriode;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
@@ -21,13 +24,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author c1042421
  */
- @WebServlet(name = "DetailServlet", urlPatterns = {"/DetailServlet"}, initParams = {
+@WebServlet(name = "DetailServlet", urlPatterns = {"/AdminServlet"}, initParams = {
     @WebInitParam(name = "url", value = "jdbc:oracle:thin:@itf-oracledb01.thomasmore.be:1521:XE")
     , @WebInitParam(name = "driver", value = "oracle.jdbc.driver.OracleDriver")
     , @WebInitParam(name = "login", value = "c1042421")
     , @WebInitParam(name = "password", value = "1234")})
 
-public class DetailServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,28 +41,29 @@ public class DetailServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-   
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String url = getInitParameter("url");
         String login = getInitParameter("login");
         String password = getInitParameter("password");
         String driver = getInitParameter("driver");
-        
-       String id = request.getParameter("id");
-       Hotel hotel = null;
+
+        String id = request.getParameter("id");
+        Hotel hotel = null;
+        ArrayList<Periode> periodes = new ArrayList<>();
+
         try {
             DAHotel daHotel = new DAHotel(url, login, password, driver);
+            DAPeriode daPeriode = new DAPeriode(url, login, password, driver);
+            
             hotel = daHotel.getHotel(id);
+            periodes = daPeriode.getPeriodes();
+            session.setAttribute("adminHotel", hotel);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        session.setAttribute("detailHotel", hotel);
         
         request.getRequestDispatcher("nieuweReis.jsp").forward(request, response);
     }

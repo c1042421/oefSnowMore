@@ -8,6 +8,7 @@ package hbo5.it.www.dataacces;
 import hbo5.it.www.beans.Aanbod;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class DAAanbod {
     }
 
     public ArrayList<Aanbod> getAllAanbodSortedByPeriodAndName() {
-       return getAanbodForSQLStatement("select * from aanbod "
+        return getAanbodForSQLStatement("select * from aanbod "
                 + "inner join periode on periodeid = periode.id "
                 + "inner join hotel on hotelid = hotel.id "
                 + "inner join skigebied on skigebiedid = skigebied.id "
@@ -43,13 +44,29 @@ public class DAAanbod {
                 + "inner join skigebied on skigebiedid = skigebied.id "
                 + "where periodeid = " + id);
     }
-    
+
     public ArrayList<Aanbod> getAanbodForMaxPrijs(int prijs) {
         return getAanbodForSQLStatement("select * from aanbod "
                 + "inner join periode on periodeid = periode.id "
                 + "inner join hotel on hotelid = hotel.id "
                 + "inner join skigebied on skigebiedid = skigebied.id "
                 + "where prijs <= " + prijs);
+    }
+
+    public boolean makeNewAanbod(Aanbod aanbod) {
+        try (
+            Connection connection = DriverManager.getConnection(url, login, password);) {
+            PreparedStatement statement = connection.prepareStatement("insert into aanbod (periodeid , hotelid, prijs) values (?, ? ,?)");
+            statement.setInt(1, aanbod.getPeriode().getId());
+            statement.setInt(2, aanbod.getHotel().getId());
+            statement.setDouble(3, aanbod.getPrijs());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     private ArrayList<Aanbod> getAanbodForSQLStatement(String stringStatement) {
