@@ -47,6 +47,17 @@ public class DAHotel {
                 + "inner join skigebied on hotel.skigebiedid = skigebied.id "
                 + "where aantalsterren <= " + sterren);
     }
+    
+    public  ArrayList<Hotel> getHotelsWithName(String name) {
+        ArrayList<Hotel> hotels = getAllHotelsSorted();
+        ArrayList<Hotel> returnHotels = new ArrayList<>();
+        
+        hotels.stream().filter((hotel) -> (hotel.getHotelnaam().toLowerCase().contains(name.toLowerCase()))).forEachOrdered((hotel) -> {
+            returnHotels.add(hotel);
+        });
+        
+        return returnHotels;
+    }
 
     private ArrayList<Hotel> getHotelsForSQLStatement(String stringStatement) {
         ArrayList<Hotel> hotels = new ArrayList<>();

@@ -5,7 +5,9 @@
  */
 package hbo5.it.www;
 
+import hbo5.it.www.beans.Aanbod;
 import hbo5.it.www.beans.Hotel;
+import hbo5.it.www.dataacces.DAAanbod;
 import hbo5.it.www.dataacces.DAHotel;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,14 +51,38 @@ public class ZoekServlet extends HttpServlet {
         String driver = getInitParameter("driver");
 
         int aantalSterren = Integer.parseInt(request.getParameter("sterren"));
-        
-        try {
-            DAHotel daHotel = new DAHotel(url, login, password, driver);
-            ArrayList<Hotel> hotels = daHotel.getHotelsForStars(aantalSterren);
+        String stukHotelNaam = request.getParameter("hotelNaam");
+        int maxPrijs = Integer.parseInt(request.getParameter("prijs"));
 
-            session.setAttribute("hotels", hotels);
-            request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+        boolean zoekSterren = request.getParameter("zoekSterren") != null;
+        boolean zoekNaam = request.getParameter("zoekNaam") != null;
+        boolean zoekAanbod = request.getParameter("zoekAanbod") != null;
+
+        try {
+            if (zoekSterren) {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                ArrayList<Hotel> hotels = daHotel.getHotelsForStars(aantalSterren);
+
+                session.setAttribute("hotels", hotels);
+                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+                
+            } else if (zoekNaam) {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                ArrayList<Hotel> hotels = daHotel.getHotelsWithName(stukHotelNaam);
+
+                session.setAttribute("hotels", hotels);
+                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+                
+            } else if (zoekAanbod) {
+                DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
+                ArrayList<Aanbod> aanbiedingen = daAanbod.getAanbodForMaxPrijs(maxPrijs);
+                
+                session.setAttribute("aanbiedingen", aanbiedingen);
+                request.getRequestDispatcher("overzichtAanbiedingen.jsp").forward(request, response);
+            }
+
             
+
         } catch (Exception e) {
             e.printStackTrace();
         }

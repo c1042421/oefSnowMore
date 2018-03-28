@@ -43,6 +43,14 @@ public class DAAanbod {
                 + "inner join skigebied on skigebiedid = skigebied.id "
                 + "where periodeid = " + id);
     }
+    
+    public ArrayList<Aanbod> getAanbodForMaxPrijs(int prijs) {
+        return getAanbodForSQLStatement("select * from aanbod "
+                + "inner join periode on periodeid = periode.id "
+                + "inner join hotel on hotelid = hotel.id "
+                + "inner join skigebied on skigebiedid = skigebied.id "
+                + "where prijs <= " + prijs);
+    }
 
     private ArrayList<Aanbod> getAanbodForSQLStatement(String stringStatement) {
         ArrayList<Aanbod> aanbiedingen = new ArrayList<>();
