@@ -40,7 +40,6 @@ public class AanbiedingServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
 
         String url = getInitParameter("url");
         String login = getInitParameter("login");

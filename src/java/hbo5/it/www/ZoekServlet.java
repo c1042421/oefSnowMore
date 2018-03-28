@@ -7,18 +7,14 @@ package hbo5.it.www;
 
 import hbo5.it.www.beans.Aanbod;
 import hbo5.it.www.beans.Hotel;
-import hbo5.it.www.beans.Periode;
-import hbo5.it.www.beans.Skigebied;
 import hbo5.it.www.dataacces.DAAanbod;
 import hbo5.it.www.dataacces.DAHotel;
-import hbo5.it.www.dataacces.DAPeriode;
-import hbo5.it.www.dataacces.DASkigebied;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,13 +24,12 @@ import javax.servlet.http.HttpSession;
  *
  * @author c1042421
  */
-@WebServlet(urlPatterns = {"/ManageServlet"}, initParams = {
+@WebServlet(urlPatterns = {"/ZoekServlet"}, initParams = {
     @WebInitParam(name = "url", value = "jdbc:oracle:thin:@itf-oracledb01.thomasmore.be:1521:XE")
     , @WebInitParam(name = "driver", value = "oracle.jdbc.driver.OracleDriver")
     , @WebInitParam(name = "login", value = "c1042421")
     , @WebInitParam(name = "password", value = "1234")})
-
-public class ManageServlet extends HttpServlet {
+public class ZoekServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,6 +42,7 @@ public class ManageServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
 
         String url = getInitParameter("url");
@@ -54,52 +50,38 @@ public class ManageServlet extends HttpServlet {
         String password = getInitParameter("password");
         String driver = getInitParameter("driver");
 
-        boolean laadPaginaVoorHotel = request.getParameter("hotel") != null;
-        boolean laadPaginaVoorSkiGebied = request.getParameter("skigebied") != null;
-        boolean laadPaginaAlleHotels = request.getParameter("allHotels") != null;
-        boolean laadPaginaVoorAanbod = request.getParameter("aanbod") != null;
-        boolean laadPaginaVoorZoeken = request.getParameter("zoeken") != null;
+        int aantalSterren = Integer.parseInt(request.getParameter("sterren"));
+        String stukHotelNaam = request.getParameter("hotelNaam");
+        int maxPrijs = Integer.parseInt(request.getParameter("prijs"));
 
-        String teZoekenGebied = request.getParameter("zoekSkigebied");
+        boolean zoekSterren = request.getParameter("zoekSterren") != null;
+        boolean zoekNaam = request.getParameter("zoekNaam") != null;
+        boolean zoekAanbod = request.getParameter("zoekAanbod") != null;
 
         try {
-
-            if (laadPaginaVoorSkiGebied) {
-                DASkigebied daSkigebied = new DASkigebied(url, login, password, driver);
-                Skigebied skigebied = daSkigebied.zoekSkigebiedOpNaam(teZoekenGebied);
-
-                session.setAttribute("skigebied", skigebied);
-                request.getRequestDispatcher("skigebied.jsp").forward(request, response);
-
-            } else if (laadPaginaVoorHotel) {
+            if (zoekSterren) {
                 DAHotel daHotel = new DAHotel(url, login, password, driver);
-                Hotel hotel = daHotel.getHotel("1");
-
-                session.setAttribute("hotel", hotel);
-                request.getRequestDispatcher("hotel.jsp").forward(request, response);
-
-            } else if (laadPaginaAlleHotels) {
-                DAHotel daHotel = new DAHotel(url, login, password, driver);
-                ArrayList<Hotel> hotels = daHotel.getAllHotelsSorted();
+                ArrayList<Hotel> hotels = daHotel.getHotelsForStars(aantalSterren);
 
                 session.setAttribute("hotels", hotels);
                 request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+                
+            } else if (zoekNaam) {
+                DAHotel daHotel = new DAHotel(url, login, password, driver);
+                ArrayList<Hotel> hotels = daHotel.getHotelsWithName(stukHotelNaam);
 
-            } else if (laadPaginaVoorAanbod) {
+                session.setAttribute("hotels", hotels);
+                request.getRequestDispatcher("overzichtHotels.jsp").forward(request, response);
+                
+            } else if (zoekAanbod) {
                 DAAanbod daAanbod = new DAAanbod(url, login, password, driver);
-                ArrayList<Aanbod> aanbiedingen = daAanbod.getAllAanbodSortedByPeriodAndName();
-
+                ArrayList<Aanbod> aanbiedingen = daAanbod.getAanbodForMaxPrijs(maxPrijs);
+                
                 session.setAttribute("aanbiedingen", aanbiedingen);
                 request.getRequestDispatcher("overzichtAanbiedingen.jsp").forward(request, response);
-
-            } else if (laadPaginaVoorZoeken) {
-                request.getRequestDispatcher("zoek.jsp").forward(request, response);
             }
 
-            DAPeriode daperiode = new DAPeriode(url, login, password, driver);
-            ArrayList<Periode> periodes = daperiode.getPeriodes();
-
-            session.setAttribute("periodes", periodes);
+            
 
         } catch (Exception e) {
             e.printStackTrace();

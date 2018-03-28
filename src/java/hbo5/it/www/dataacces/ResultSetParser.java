@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class ResultSetParser {
 
-    static public Hotel parseHotel(ResultSet resultset) throws SQLException {
+    static public Hotel maakHotel(ResultSet resultset) throws SQLException {
         Hotel hotel = new Hotel();
         Skigebied skigebied = maakSkigebied(resultset);
 
@@ -39,7 +39,7 @@ public class ResultSetParser {
     }
 
     static public Aanbod maakAanbod(ResultSet resultset) throws SQLException {
-        Hotel hotel = parseHotel(resultset);
+        Hotel hotel = maakHotel(resultset);
         Periode periode = maakPeriode(resultset);
 
         Aanbod aanbod = new Aanbod();
